@@ -153,7 +153,7 @@ exports.updateimgprofile = function (req, res) {
                        
                     });
 
-                    //successfulls
+                    //successfull
                     return  res.status(200).send({
     
                         "isOperationSuccess": true,
