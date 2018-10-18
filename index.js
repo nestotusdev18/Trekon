@@ -5,7 +5,7 @@ const config=require('./config/database');
 const apirouter=require('./api-router/api-router');
 const bodyparser=require('body-parser');
  const mongoose=require('mongoose');
- let app = express();
+ const app = express();
  mongoose.connect(config.database);
 let db = mongoose.connection;
 
