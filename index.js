@@ -5,7 +5,7 @@ const config=require('./config/database');
 const apirouter=require('./api-router/api-router');
 const bodyparser=require('body-parser');
  const mongoose=require('mongoose');
- const app = express();
+const app = express();
  mongoose.connect(config.database);
 let db = mongoose.connection;
 
@@ -19,7 +19,7 @@ db.on('error', function(err){
   console.log(err);
 });
 app.use(bodyparser.urlencoded({
-    extended:true
+    extended:false
 }));
 app.use(bodyparser.json());
 
