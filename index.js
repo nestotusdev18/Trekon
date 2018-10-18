@@ -19,7 +19,7 @@ db.on('error', function(err){
   console.log(err);
 });
 app.use(bodyparser.urlencoded({
-    extended:true
+    extended:false
 }));
 app.use(bodyparser.json());
 
