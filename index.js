@@ -4,6 +4,8 @@ let express = require('express');
 const config=require('./config/database');
 const apirouter=require('./api-router/api-router');
 const bodyparser=require('body-parser');
+const session = require('express-session');
+const passport = require('passport');
  const mongoose=require('mongoose');
 const app = express();
  mongoose.connect(config.database);
@@ -22,7 +24,25 @@ app.use(bodyparser.urlencoded({
     extended:false
 }));
 app.use(bodyparser.json());
+// Express Session Middleware
+app.use(session({
+  secret: 'keyboard cat',
+  resave: true,
+  saveUninitialized: true
+}));
 
+// Passport Config
+require('./config/passport')(passport);
+// Passport Middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Express Messages Middleware
+app.use(require('connect-flash')());
+app.use(function (req, res, next) {
+  res.locals.messages = require('express-messages')(req, res);
+  next();
+});
 // Initialize the app
 
 // Setup server port

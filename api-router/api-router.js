@@ -16,10 +16,18 @@ router.route('/users')
 
 
     router.route('/user/add').post(userController.new);
+   
+    router.route('/user/login').post(userController.loginlocal);
+
 
     router.route('/user/save/:user_id')
     .put(userController.existinguser)
     .patch(userController.existinguser);
+
+    
+    router.route('/user/auth/save/:user_id')
+    .put(userController.auth)
+    .patch(userController.auth);
     
     router.route('/user/logo/upload/:user_id')
     .put(userController.updateimgprofile)

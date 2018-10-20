@@ -2,6 +2,8 @@
 // Import user model
 var fs = require('fs');
 const users = require('../models/user');
+const passport=require("passport");
+const bcrypt = require('bcryptjs');
 // Handle index actions
 exports.index = function (req, res) {
     users.get(function (err, user) {
@@ -114,6 +116,99 @@ exports.existinguser = function (req, res) {
        
     });
 };
+
+//passport local user
+ exports.loginlocal=function(req, res, next){
+    passport.authenticate('local', {
+       
+    })(req, res, next);
+  };
+
+
+
+
+// Handle auth User
+exports.auth = function (req, res) {
+    users.findById(req.params.user_id, function (err, user) {
+        if (err)
+        return  res.status(404).send({
+    
+            "isOperationSuccess": false,
+            "recordId":req.params.user_id,
+            "recordType": "user",
+            "operationType": "Save Auth and Credentials",
+            "associationObjType": "id",
+            "successMessgae": "User not Found",
+            "errorCode": "",
+            "errorMessage": err
+          
+               
+            });
+          
+          //give Save Auth and Credentials
+          let hastpwd='';
+          user.credential={};
+          if(req.body.auth=="normal")
+          {
+        const  login = req.body.login;
+       const   password = req.body.password;
+      
+       
+         hastpwd = bcrypt.hashSync(password, 10);
+       
+        user.credential={
+            "login": login,
+            "password": hastpwd,
+            "auth": 'normal'
+            
+                    }; 
+        }
+          else
+          {
+
+
+
+
+          }
+      
+             user.save(function (err) {
+                 //fail
+                if (err)
+                return  res.status(500).send({
+    
+                    "isOperationSuccess": false,
+                    "recordId":user._id,
+                    "recordType": "user",
+            "operationType": "Save Auth and Credentials",
+            "associationObjType": "id",
+            "successMessgae": "Update Existing User Failure",
+                    "errorCode": "",
+                    "errorMessage": err
+                  
+                       
+                    });
+
+                    //successfull
+                    return  res.status(200).send({
+    
+                        "isOperationSuccess": true,
+                        "recordId":user._id,
+                        "recordType": "user",
+                        "operationType": "Save Auth and Credentials",
+                        "associationObjType": "id",
+                        "successMessgae": "Save Auth and Credentials successfully",
+                        "errorCode": "",
+                        "errorMessage": err
+                      
+                           
+                        });
+            });
+       
+    });
+};
+
+
+
 
 // Handle update profile image
 exports.updateimgprofile = function (req, res) {
