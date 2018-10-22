@@ -1,6 +1,7 @@
 // api-routes.js
 // Initialize express router
 let router = require('express').Router();
+
 // Set default API response
 router.get('/', function (req, res) {
     res.json({
@@ -18,7 +19,7 @@ router.route('/users')
     router.route('/user/add').post(userController.new);
    
     router.route('/user/login').post(userController.loginlocal);
-
+    router.route('/user/profile').get(userController.profile);
 
     router.route('/user/save/:user_id')
     .put(userController.existinguser)

@@ -4,6 +4,8 @@ var fs = require('fs');
 const users = require('../models/user');
 const passport=require("passport");
 const bcrypt = require('bcryptjs');
+const config = require('../config/database');
+const jwt = require('jsonwebtoken');
 // Handle index actions
 exports.index = function (req, res) {
     users.get(function (err, user) {
@@ -119,17 +121,78 @@ exports.existinguser = function (req, res) {
 
 //passport local user
  exports.loginlocal=function(req, res, next){
-    passport.authenticate('local', {
-       
-    })(req, res, next);
+    passport.authenticate('local', 
+        {session: false},
+        (err, user, info) => {
+
+           // console.log(err);
+            if (err || !user) {
+                return res.status(400).json({
+                    message: info ? info.message : 'Login failed',
+                    user   : user
+                });
+            }
+    
+            req.login(user, {session: false}, (err) => {
+                if (err) {
+                    res.send(err);
+                }
+    
+                var token = jwt.sign({id: user._id}, config.secret, {
+                    expiresIn: 86400 // expires in 24 hours
+                  });
+    
+                return res.json({user, token});
+            });
+        })
+        (req, res);
   };
 
+/* GET user profile. */
+exports.profile= function(req, res, next) {
+    passport.authenticate('jwt', 
+        {session: false},
+        (err, user) => {
 
-
-
+           
+            if (err || !user) {
+                return res.status(400).json({
+                   
+                    user   : user
+                    ,
+                    message: err
+                });
+            }
+    
+         
+    
+                return res.json({user});
+            
+        }) (req, res);
+       
+  };
+ // Access Control
+ function ensureAuthenticated(req, res, next){
+    console.log(req.headers['Authorization']);
+    var f = req.headers['Authorization'].split(' ');
+   
+ var token=f[1];
+    if (!token)
+      return res.status(403).send({ auth: false, message: 'No token provided.' });
+    jwt.verify(token, config.secret, function(err, decoded) {
+      if (err)
+      return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+      // if everything good, save to request for use in other routes
+     
+      next();
+    });
+  
+  }
 // Handle auth User
-exports.auth = function (req, res) {
+exports.auth = ( ensureAuthenticated,function (req, res) {
+ 
     users.findById(req.params.user_id, function (err, user) {
+       
         if (err)
         return  res.status(404).send({
     
@@ -205,7 +268,8 @@ exports.auth = function (req, res) {
             });
        
     });
-};
+});
+
 
 
 

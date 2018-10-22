@@ -4,6 +4,9 @@ const User = require('../models/user');
 const config = require('../config/database');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const passportJWT = require("passport-jwt");
+const JWTStrategy   = passportJWT.Strategy;
+const ExtractJWT = passportJWT.ExtractJwt;
 //const keys=require('./keys');
 module.exports = function(passport){
   //google strategy
@@ -19,26 +22,33 @@ module.exports = function(passport){
 //     }
 //   ))
   // Local Strategy
-  passport.use(new LocalStrategy({ passReqToCallback : true},function(login, password, done){
+  passport.use(new LocalStrategy({
+		usernameField: 'Username',
+		passwordField: 'password'
+	},function(Username, password, done){
     // Match Username
-    let query = {
+   
+    // let query= {
       
-      login:login};
-    User.findOne(query, function(err, user){
+    //   "firstName" :Username
+    // };
+   // console.log(query.credential.login);
+    User.findOne({"credential.login": Username  }, function(err, user){
       if(err) throw err;
       if(!user){
-        return done(null, false, {message: 'No user found'});
+      //  console.log(user[0]);
+        return done(null, false, {message: 'No user found.'});
       }
-
+      //console.log(user[0]);
       // Match Password
-      bcrypt.compare(password, user.password, function(err, isMatch){
+      bcrypt.compare(password, user.credential.password, function(err, isMatch){
         if(err) throw err;
         if(isMatch){
-          var token = jwt.sign({ id: user._id }, config.secret, {
-            expiresIn: 86400 // expires in 24 hours
-          });
+          // var token = jwt.sign({ id: user._id }, config.secret, {
+          //   expiresIn: 86400 // expires in 24 hours
+          // });
        
-          return done(null, user,{token:token});
+          return done(null, user,{message: ' user found.'});
 
         } else {
           return done(null, false, {message: 'Wrong password'});
@@ -47,13 +57,22 @@ module.exports = function(passport){
     });
   }));
 
-  passport.serializeUser(function(user, done) {
-    done(null, user.id);
-  });
+  passport.use(new JWTStrategy({
+    jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+    secretOrKey   : config.secret
+},
 
-  passport.deserializeUser(function(id, done) {
-    User.findById(id, function(err, user) {
-      done(err, user);
-    });
-  });
+function (jwtPayload, done) {
+
+    //find the user in db if needed
+    return User.findById(jwtPayload.id)
+        .then(user => {
+          
+            return done(null, user);
+        })
+        .catch(err => {
+            return done(err);
+        });
+}
+));
 }

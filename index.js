@@ -21,7 +21,7 @@ db.on('error', function(err){
   console.log(err);
 });
 app.use(bodyparser.urlencoded({
-    extended:false
+    extended:true
 }));
 app.use(bodyparser.json());
 // Express Session Middleware
@@ -49,7 +49,7 @@ app.use(function (req, res, next) {
 var port = process.env.PORT || 8080;
 // Send message for default URL
 app.get('/', (req, res) => res.send('http://trekondev.azurewebsites.net/api/users'));
-app.use('/api',apirouter);
+app.use('/api/',apirouter);
 // Launch app to listen to specified port
 app.listen(port, function () {
      console.log("Running RestHub on port " + port);
