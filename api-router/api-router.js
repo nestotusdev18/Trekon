@@ -10,10 +10,28 @@ router.get('/', function (req, res) {
     });
 });
 // Import contact controller
-var userController = require('../controllers/users');
+const userController = require('../controllers/users');
+const customerController=require('../controllers/customer');
 // Contact routes
 router.route('/users')
     .get(userController.index);
+
+    router.route('/customers')
+    .get(customerController.index);
+
+    router.route('/customer/add')
+    .post(customerController.new);
+
+
+    router.route('/customer/save/:customer_id')
+    .put(customerController.existingcustomer)
+    .patch(customerController.existingcustomer);
+
+
+    router.route('/customer/logo/upload/:customer_id')
+    .put(customerController.updateimglogo)
+    .patch(customerController.updateimglogo);
+
 
 
     router.route('/user/add').post(userController.new);

@@ -91,9 +91,9 @@ exports.existinguser = function (req, res) {
                     "isOperationSuccess": false,
                     "recordId":req.params.user_id,
                     "recordType": "user",
-            "operationType": "Update Existing User",
-            "associationObjType": "id",
-            "successMessgae": "Update Existing User Failure",
+                    "operationType": "Update Existing User",
+                    "associationObjType": "id",
+                    "successMessgae": "Update Existing User Failure",
                     "errorCode": "",
                     "errorMessage": err
                   
@@ -172,9 +172,10 @@ exports.profile= function(req, res, next) {
        
   };
  // Access Control
- function ensureAuthenticated(req, res, next){
-    console.log(req.headers['Authorization']);
-    var f = req.headers['Authorization'].split(' ');
+ function ensureAuthenticated(req,res){
+   if(!req.headers['authorization'])
+   return res.status(403).send({ auth: false, message: 'No token provided.' });
+    var f =  req.headers['authorization'].split(' ');
    
  var token=f[1];
     if (!token)
@@ -184,13 +185,13 @@ exports.profile= function(req, res, next) {
       return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
       // if everything good, save to request for use in other routes
      
-      next();
+     
     });
   
   }
 // Handle auth User
-exports.auth = ( ensureAuthenticated,function (req, res) {
- 
+exports.auth = function (req, res) {
+   // ensureAuthenticated(req,res);
     users.findById(req.params.user_id, function (err, user) {
        
         if (err)
@@ -242,9 +243,9 @@ exports.auth = ( ensureAuthenticated,function (req, res) {
                     "isOperationSuccess": false,
                     "recordId":user._id,
                     "recordType": "user",
-            "operationType": "Save Auth and Credentials",
-            "associationObjType": "id",
-            "successMessgae": "Update Existing User Failure",
+                    "operationType": "Save Auth and Credentials",
+                    "associationObjType": "id",
+                    "successMessgae": "Update Existing User Failure",   
                     "errorCode": "",
                     "errorMessage": err
                   
@@ -268,7 +269,7 @@ exports.auth = ( ensureAuthenticated,function (req, res) {
             });
        
     });
-});
+};
 
 
 
@@ -303,9 +304,9 @@ exports.updateimgprofile = function (req, res) {
                     "isOperationSuccess": false,
                     "recordId":req.params.user_id,
                     "recordType": "user",
-            "operationType": "update profile image",
-            "associationObjType": "id,file stream",
-            "successMessgae": "update profile image Failure",
+                    "operationType": "update profile image",
+                    "associationObjType": "id,file stream",
+                    "successMessgae": "update profile image Failure",
                     "errorCode": "",
                     "errorMessage": err
                   
@@ -363,9 +364,9 @@ exports.assignuser = function (req, res) {
                     "isOperationSuccess": false,
                     "recordId":req.params.user_id,
                     "recordType": "user",
-            "operationType": "Assign as SuperUser",
-            "associationObjType": "id",
-            "successMessgae": "Assigned as SuperUser Failure",
+                    "operationType": "Assign as SuperUser",
+                    "associationObjType": "id",
+                    "successMessgae": "Assigned as SuperUser Failure",
                     "errorCode": "500",
                     "errorMessage": err
                   
@@ -419,9 +420,9 @@ exports.addgrant = function (req, res) {
                     "isOperationSuccess": false,
                     "recordId":req.params.user_id,
                     "recordType": "user",
-            "operationType": "grant customer access for user",
-            "associationObjType": "id",
-            "successMessgae": "grant customer access for user Failure",
+                    "operationType": "grant customer access for user",
+                    "associationObjType": "id",
+                    "successMessgae": "grant customer access for user Failure",
                     "errorCode": "",
                     "errorMessage": err
                   
@@ -483,9 +484,9 @@ exports.removegrant = function (req, res) {
                             "isOperationSuccess": false,
                             "recordId":user._id,
                             "recordType": "user",
-                    "operationType": "Remove grant customer access for user",
-                    "associationObjType": "id",
-                    "successMessgae": "Remove grant customer access for user Failure",
+                            "operationType": "Remove grant customer access for user",
+                            "associationObjType": "id",
+                            "successMessgae": "Remove grant customer access for user Failure",
                             "errorCode": "",
                             "errorMessage": err
                           
@@ -564,8 +565,8 @@ exports.unassignuser = function (req, res) {
                         "recordId":user._id,
                         "recordType": "user",
                         "operationType": "Un Assign as SuperUser",
-                    "associationObjType": "id",
-                    "successMessgae": "Unassigned as SuperUser Successfully",
+                        "associationObjType": "id",
+                        "successMessgae": "Unassigned as SuperUser Successfully",
                         "errorCode": "",
                         "errorMessage": err
                       
@@ -606,9 +607,9 @@ exports.contactsave = function (req, res) {
                     "isOperationSuccess": false,
                     "recordId":req.params.user_id,
                     "recordType": "user",
-            "operationType": "Save contact info",
-            "associationObjType": "id",
-            "successMessgae": "Save contact info Failure",
+                    "operationType": "Save contact info",
+                    "associationObjType": "id",
+                    "successMessgae": "Save contact info Failure",
                     "errorCode": "",
                     "errorMessage": err
                   

@@ -1,4 +1,4 @@
-// contactModel.js
+// user.js
 var mongoose = require('mongoose');
 // Setup schema
 var user = mongoose.Schema({
