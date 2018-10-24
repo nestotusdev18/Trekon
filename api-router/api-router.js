@@ -28,6 +28,23 @@ router.route('/users')
     .patch(customerController.existingcustomer);
 
 
+    router.route('/customer/activate/:customer_id')
+    .put(customerController.activecustomer)
+    .patch(customerController.activecustomer);
+
+    router.route('/customer/inactivate/:customer_id')
+    .put(customerController.inactivecustomer)
+    .patch(customerController.inactivecustomer);
+
+    router.route('/customer/contact/save/:customer_id')
+    .put(customerController.contactsave)
+    .patch(customerController.contactsave);
+
+    router.route('/customer/db/save/:customer_id')
+    .put(customerController.DBcustomer)
+    .patch(customerController.DBcustomer);
+
+
     router.route('/customer/logo/upload/:customer_id')
     .put(customerController.updateimglogo)
     .patch(customerController.updateimglogo);

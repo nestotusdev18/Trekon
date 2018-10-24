@@ -122,6 +122,70 @@ exports.existingcustomer = function (req, res) {
 
 
 
+// Handle Save DB information of customer
+exports.DBcustomer = function (req, res) {
+    customers.findById(req.params.customer_id, function (err, customer) {
+        if (err)
+        return  res.status(404).send({
+    
+            "isOperationSuccess": false,
+            "recordId":req.params.customer_id,
+            "recordType": "customer",
+            "operationType": "Save DB information of customer",
+            "associationObjType": "id",
+            "successMessgae": "customer not Found",
+            "errorCode": "",
+            "errorMessage": err
+          
+               
+            });
+          
+          //give Save DB information of customer
+        
+          customer.dbConnection= {  "url": req.body.url,
+          "username": req.body.username,
+          "password": req.body.password}
+        
+         
+             customer.save(function (err) {
+                 //fail
+                if (err)
+                return  res.status(500).send({
+    
+                    "isOperationSuccess": false,
+                    "recordId":req.params.customer_id,
+                    "recordType": "customer",
+                    "operationType": "Save DB information of customer",
+                    "associationObjType": "id",
+                    "successMessgae": "Save DB information of customer",
+                    "errorCode": "",
+                    "errorMessage": err
+                  
+                       
+                    });
+
+                    //successfull
+                    return  res.status(200).send({
+    
+                        "isOperationSuccess": true,
+                        "recordId":customer._id,
+                        "recordType": "customer",
+                        "operationType": "Save DB information of customer",
+                        "associationObjType": "id",
+                        "successMessgae": "Save DB information of customer successfully",
+                        "errorCode": "",
+                        "errorMessage": err
+                      
+                           
+                        });
+            });
+       
+    });
+};
+
+
+
+
 // Handle update logo image
 exports.updateimglogo = function (req, res) {
     customers.findById(req.params.customer_id, function (err, customer) {
@@ -169,6 +233,180 @@ exports.updateimglogo = function (req, res) {
                         "operationType": "update logo image",
                         "associationObjType": "id,file stream",
                         "successMessgae": "update logo image successfully",
+                        "errorCode": "",
+                        "errorMessage": err
+                      
+                           
+                        });
+            });
+       
+    });
+};
+
+
+// Handle Activate inactive customer
+exports.activecustomer = function (req, res) {
+    customers.findById(req.params.customer_id, function (err, customer) {
+        if (err)
+        return  res.status(404).send({
+    
+            "isOperationSuccess": false,
+            "recordId":req.params.customer_id,
+            "recordType": "customer",
+            "operationType": "Activate inactive customer",
+            "associationObjType": "id",
+            "successMessgae": "customer not Found",
+            "errorCode": "",
+            "errorMessage": err
+          
+               
+            });
+          
+          //give permission 
+            customer.isActive=true;
+             customer.save(function (err) {
+                 //fail
+                if (err)
+                return  res.status(500).send({
+    
+                    "isOperationSuccess": false,
+                    "recordId":req.params.customer_id,
+                    "recordType": "customer",
+                    "operationType": "Activate inactive customer",
+                    "associationObjType": "id",
+                    "successMessgae": "Activate inactive customer Failure",
+                    "errorCode": "500",
+                    "errorMessage": err
+                  
+                       
+                    });
+
+                    //successfull
+                    return  res.status(200).send({
+    
+                        "isOperationSuccess": true,
+                        "recordId":customer._id,
+                        "recordType": "customer",
+                        "operationType": "Activate inactive customer",
+                        "associationObjType": "id",
+                        "successMessgae": "Activate inactive customer successfully",
+                        "errorCode": "",
+                        "errorMessage": err
+                      
+                           
+                        });
+            });
+       
+    });
+};
+
+
+
+// Handle Inactivate active customer
+exports.inactivecustomer = function (req, res) {
+    customers.findById(req.params.customer_id, function (err, customer) {
+        if (err)
+        return  res.status(404).send({
+    
+            "isOperationSuccess": false,
+            "recordId":req.params.customer_id,
+            "recordType": "customer",
+            "operationType": "Inactivate active customer",
+            "associationObjType": "id",
+            "successMessgae": "customer not Found",
+            "errorCode": "",
+            "errorMessage": err
+          
+               
+            });
+          
+          //give permission 
+            customer.isActive=false;
+             customer.save(function (err) {
+                 //fail
+                if (err)
+                return  res.status(500).send({
+    
+                    "isOperationSuccess": false,
+                    "recordId":req.params.customer_id,
+                    "recordType": "customer",
+                    "operationType": "Inactivate active customer",
+                    "associationObjType": "id",
+                    "successMessgae": "Inactivate active customer Failure",
+                    "errorCode": "500",
+                    "errorMessage": err
+                  
+                       
+                    });
+
+                    //successfull
+                    return  res.status(200).send({
+    
+                        "isOperationSuccess": true,
+                        "recordId":customer._id,
+                        "recordType": "customer",
+                        "operationType": "Inactivate active customer",
+                        "associationObjType": "id",
+                        "successMessgae": "Inactivate active customer successfully",
+                        "errorCode": "",
+                        "errorMessage": err
+                      
+                           
+                        });
+            });
+       
+    });
+};
+
+// Handle Save contact info
+exports.contactsave = function (req, res) {
+    customers.findById(req.params.customer_id, function (err, customer) {
+        if (err)
+        return  res.status(404).send({
+    
+            "isOperationSuccess": false,
+            "recordId":req.params.customer_id,
+            "recordType": "customer",
+            "operationType": "Save contact info",
+            "associationObjType": "id",
+            "successMessgae": "customer not Found",
+            "errorCode": "",
+            "errorMessage": err
+          
+               
+            });
+          
+          //give Save contact info
+          customer.contact=req.body.contact;
+        
+
+         
+             customer.save(function (err) {
+                 //fail
+                if (err)
+                return  res.status(500).send({
+    
+                    "isOperationSuccess": false,
+                    "recordId":req.params.customer_id,
+                    "recordType": "customer",
+                    "operationType": "Save contact info",
+                    "associationObjType": "id",
+                    "successMessgae": "Save contact info Failure",
+                    "errorCode": "",
+                    "errorMessage": err
+                  
+                       
+                    });
+
+                    //successfull
+                    return  res.status(200).send({
+    
+                        "isOperationSuccess": true,
+                        "recordId":customer._id,
+                        "recordType": "customer",
+                        "operationType": "Save contact info",
+                        "associationObjType": "id",
+                        "successMessgae": "Save contact info successfully",
                         "errorCode": "",
                         "errorMessage": err
                       
