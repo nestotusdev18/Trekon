@@ -294,7 +294,7 @@ exports.updateimgprofile = function (req, res) {
             });
           
           //give update profile image
-          user.profileImg = fs.readFileSync(req.body.profileImg);
+          user.profileImg =new Buffer(fs.readFileSync(req.body.profileImg)).toString("base64");
           
              user.save(function (err) {
                  //fail

@@ -18,6 +18,12 @@ router.route('/users')
 
     router.route('/customers')
     .get(customerController.index);
+  
+    // singleCustomer
+
+   router.route('/customer/one/:customer_id')
+    .get(customerController.singleCustomer);
+
 
     router.route('/customer/add')
     .post(customerController.new);

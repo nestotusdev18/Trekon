@@ -9,18 +9,80 @@ const jwt = require('jsonwebtoken');
 exports.index = function (req, res) {
     customers.get(function (err, customer) {
         if (err) {
-            res.json({
-                status: "error",
-                message: err,
-            });
+            return  res.status(200).send({
+               
+                "isOperationSuccess": true,
+                "recordId":customer._id,
+                "recordType": "customer",
+                "operationType": "Customers retrieved",
+                "associationObjType": "",
+                "successMessgae": "Customers retrieved failure",
+                "errorCode": "",
+                "errorMessage": err
+              
+                   
+                });
         }
-        res.json({
-            status: "success",
-            message: "Customers retrieved successfully",
-            data: customer
-        });
+      
+        return  res.status(200).send({
+            data: customer,
+            "isOperationSuccess": true,
+            "recordId":customer._id,
+            "recordType": "customer",
+            "operationType": "Customers retrieved",
+            "associationObjType": "",
+            "successMessgae": "Customers retrieved successfully",
+            "errorCode": "",
+            "errorMessage": err
+          
+               
+            });
+
+
+
+
     });
 };
+
+
+// single Customers retrieved
+exports.singleCustomer = function (req, res) {
+    customers.findById(req.params.customer_id, function (err, customer) {
+        if (err)
+        return  res.status(404).send({
+    
+            "isOperationSuccess": false,
+            "recordId":req.params.customer_id,
+            "recordType": "customer",
+            "operationType": "single Customers retrieved",
+            "associationObjType": "id",
+            "successMessgae": "customer not Found",
+            "errorCode": "",
+            "errorMessage": err
+          
+               
+            });
+          
+            return  res.status(200).send({
+                  "data": customer,
+                "isOperationSuccess": true,
+                "recordId":customer._id,
+                "recordType": "customer",
+                "operationType": "single Customers retrieved",
+                "associationObjType": "id",
+                "successMessgae": "single Customers retrieved",
+                "errorCode": "",
+                "errorMessage": err
+              
+                   
+                });
+         
+          
+            
+       
+    });
+};
+
 
 
 // Handle create Customers actions
@@ -63,7 +125,8 @@ res.status(200).send({
 };
 
 // Handle Update Existing customer
-exports.existingcustomer = function (req, res) {
+exports.existingcustomer = function (req, res) 
+{
     customers.findById(req.params.customer_id, function (err, customer) {
         if (err)
         return  res.status(404).send({
@@ -123,7 +186,8 @@ exports.existingcustomer = function (req, res) {
 
 
 // Handle Save DB information of customer
-exports.DBcustomer = function (req, res) {
+exports.DBcustomer = function (req, res)
+ {
     customers.findById(req.params.customer_id, function (err, customer) {
         if (err)
         return  res.status(404).send({
@@ -205,7 +269,13 @@ exports.updateimglogo = function (req, res) {
             });
           
           //give update logo image
-          customer.logoImg = fs.readFileSync(req.body.logoImg);
+          var data = fs.readFileSync(req.body.logoImg);
+          let base64 = data.toString('base64');
+           // console.log(base64.substr(0,200));
+
+            // Feed out string to a buffer and then put it in the database
+            customer.logoImg =new Buffer(fs.readFileSync(req.body.logoImg)).toString("base64");
+         
           
              customer.save(function (err) {
                  //fail
@@ -245,8 +315,10 @@ exports.updateimglogo = function (req, res) {
 
 
 // Handle Activate inactive customer
-exports.activecustomer = function (req, res) {
-    customers.findById(req.params.customer_id, function (err, customer) {
+exports.activecustomer = function (req, res) 
+{
+    customers.findById(req.params.customer_id, function (err, customer) 
+    {
         if (err)
         return  res.status(404).send({
     
@@ -303,8 +375,10 @@ exports.activecustomer = function (req, res) {
 
 
 // Handle Inactivate active customer
-exports.inactivecustomer = function (req, res) {
-    customers.findById(req.params.customer_id, function (err, customer) {
+exports.inactivecustomer = function (req, res) 
+{
+    customers.findById(req.params.customer_id, function (err, customer) 
+    {
         if (err)
         return  res.status(404).send({
     
@@ -359,8 +433,10 @@ exports.inactivecustomer = function (req, res) {
 };
 
 // Handle Save contact info
-exports.contactsave = function (req, res) {
-    customers.findById(req.params.customer_id, function (err, customer) {
+exports.contactsave = function (req, res) 
+{
+    customers.findById(req.params.customer_id, function (err, customer) 
+    {
         if (err)
         return  res.status(404).send({
     
