@@ -197,7 +197,7 @@ exports.DBcustomer = function (req, res)
             "recordType": "customer",
             "operationType": "Save DB information of customer",
             "associationObjType": "id",
-            "successMessgae": "customer not Found",
+            "successMessgae": "custnomer not Found",
             "errorCode": "",
             "errorMessage": err
           
