@@ -267,14 +267,14 @@ exports.updateimglogo = function (req, res) {
           
                
             });
-          
+          console.log(req.body.logoImg);
           //give update logo image
-          var data = fs.readFileSync(req.body.logoImg);
-          let base64 = data.toString('base64');
-           // console.log(base64.substr(0,200));
+        //   var data = fs.readFileSync(req.body.logoImg);
+        //   let base64 = data.toString('base64');
+        //    // console.log(base64.substr(0,200));
 
-            // Feed out string to a buffer and then put it in the database
-            customer.logoImg =new Buffer(fs.readFileSync(req.body.logoImg)).toString("base64");
+        //     // Feed out string to a buffer and then put it in the database
+        //     customer.logoImg =new Buffer(fs.readFileSync(req.body.logoImg)).toString("base64");
          
           
              customer.save(function (err) {
@@ -335,7 +335,7 @@ exports.activecustomer = function (req, res)
             });
           
           //give permission 
-            customer.isActive=true;
+            customer.isActive=req.body.isActive ? req.body.isActive : customer.isActive;
              customer.save(function (err) {
                  //fail
                 if (err)
@@ -395,7 +395,7 @@ exports.inactivecustomer = function (req, res)
             });
           
           //give permission 
-            customer.isActive=false;
+          customer.isActive=req.body.isActive ? req.body.isActive : customer.isActive;
              customer.save(function (err) {
                  //fail
                 if (err)
@@ -412,7 +412,7 @@ exports.inactivecustomer = function (req, res)
                   
                        
                     });
-
+                  
                     //successfull
                     return  res.status(200).send({
     
