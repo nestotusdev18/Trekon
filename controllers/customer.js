@@ -189,6 +189,7 @@ exports.existingcustomer = function (req, res)
 exports.DBcustomer = function (req, res)
  {
     customers.findById(req.params.customer_id, function (err, customer) {
+        
         if (err)
         return  res.status(404).send({
     
@@ -267,14 +268,22 @@ exports.updateimglogo = function (req, res) {
           
                
             });
-          console.log(req.body.logoImg);
-          //give update logo image
-        //   var data = fs.readFileSync(req.body.logoImg);
-        //   let base64 = data.toString('base64');
-        //    // console.log(base64.substr(0,200));
+         
+     let imageFile=req.files.logoImg;
 
-        //     // Feed out string to a buffer and then put it in the database
-        //     customer.logoImg =new Buffer(fs.readFileSync(req.body.logoImg)).toString("base64");
+
+
+
+
+//console.log(imageFile.data);
+
+
+
+
+
+        //  give update logo image
+         
+            customer.logoImg =imageFile.data.toString("base64");
          
           
              customer.save(function (err) {
@@ -304,8 +313,8 @@ exports.updateimglogo = function (req, res) {
                         "associationObjType": "id,file stream",
                         "successMessgae": "update logo image successfully",
                         "errorCode": "",
-                        "errorMessage": err
-                      
+                        "errorMessage": err,
+                      "data":customer.logoImg
                            
                         });
             });

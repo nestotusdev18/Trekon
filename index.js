@@ -7,6 +7,8 @@ const bodyparser=require('body-parser');
 const session = require('express-session');
 const passport = require('passport');
  const mongoose=require('mongoose');
+ const fileUpload = require('express-fileupload');
+ const cors = require('cors');
 const app = express();
  mongoose.connect(config.database);
 let db = mongoose.connection;
@@ -23,6 +25,8 @@ db.on('error', function(err){
 app.use(bodyparser.urlencoded({
     extended:true
 }));
+app.use(fileUpload());
+app.use(cors());
 app.use(bodyparser.json());
 // Express Session Middleware
 app.use(session({
@@ -39,6 +43,7 @@ app.use(passport.session());
 
 // Express Messages Middleware
 app.use(require('connect-flash')());
+app.use('/public', express.static(__dirname + '/public'));
 app.use(function (req, res, next) {
 
   // Website you wish to allow to connect
