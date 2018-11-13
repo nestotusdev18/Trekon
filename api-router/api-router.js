@@ -14,7 +14,9 @@ const userController = require('../controllers/users');
 const customerController=require('../controllers/customer');
 // Contact routes
 router.route('/users')
-    .get(userController.index);
+ .get(userController.index);
+ router.route('/users')
+//     .get([userController.profile,userController.index]);
 
     router.route('/customers')
     .get(customerController.index);

@@ -135,14 +135,40 @@ exports.existinguser = function (req, res) {
     
             req.login(user, {session: false}, (err) => {
                 if (err) {
-                    res.send(err);
+                  //successfull
+                  return  res.status(401).send({
+                      "token":'',
+                    "isOperationSuccess": false,
+                    "recordId":user._id,
+                    "recordType": "user",
+                    "operationType": "login",
+                    "associationObjType": "user,password",
+                    "successMessgae": "login failure",
+                    "errorCode": "",
+                    "errorMessage": err
+                  
+                       
+                    });
                 }
     
                 var token = jwt.sign({id: user._id}, config.secret, {
                     expiresIn: 86400 // expires in 24 hours
                   });
-    
-                return res.json({user, token});
+    //successfull
+    return  res.status(200).send({
+         "token":token,
+        "isOperationSuccess": true,
+        "recordId":user._id,
+        "recordType": "user",
+        "operationType": "login",
+        "associationObjType": "login,password",
+        "successMessgae": "login successfully",
+        "errorCode": "",
+        "errorMessage": err
+      
+           
+        });
+              //  return res.json({user, token});
             });
         })
         (req, res);
@@ -150,6 +176,9 @@ exports.existinguser = function (req, res) {
 
 /* GET user profile. */
 exports.profile= function(req, res, next) {
+    if(req.headers['authorization'])
+    {
+        token=req.headers['authorization'];
     passport.authenticate('jwt', 
         {session: false},
         (err, user) => {
@@ -158,18 +187,24 @@ exports.profile= function(req, res, next) {
             if (err || !user) {
                 return res.status(400).json({
                    
-                    user   : user
+                    token   : token
                     ,
-                    message: err
+                    message: "token is invalid"
                 });
             }
     
          
     
-                return res.json({user});
+                next();
             
         }) (req, res);
-       
+    }
+    else{
+        return res.status(400).json({
+            token:null,
+            message:"No token"
+        })
+    }     
   };
  // Access Control
  function ensureAuthenticated(req,res){

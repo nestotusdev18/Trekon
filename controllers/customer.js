@@ -23,7 +23,7 @@ exports.index = function (req, res) {
                    
                 });
         }
-      
+     // console.log(req.headers['authorization']);
         return  res.status(200).send({
             data: customer,
             "isOperationSuccess": true,

@@ -23,7 +23,7 @@ module.exports = function(passport){
 //   ))
   // Local Strategy
   passport.use(new LocalStrategy({
-		usernameField: 'Username',
+		usernameField: 'username',
 		passwordField: 'password'
 	},function(Username, password, done){
     // Match Username
