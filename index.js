@@ -10,6 +10,7 @@ const passport = require('passport');
  const fileUpload = require('express-fileupload');
  const cors = require('cors');
 const app = express();
+app = express.createServer();
  mongoose.connect(config.database);
 let db = mongoose.connection;
 
