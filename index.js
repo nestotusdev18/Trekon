@@ -69,8 +69,9 @@ app.use(function (req, res, next) {
 // Setup server port
 var port = process.env.PORT || 8080;
 // Send message for default URL
-app.get('/', (req, res) => res.send('http://trekondev.azurewebsites.net/api/users'));
 app.use('/api/',apirouter);
+app.get('/', (req, res) => res.send('http://trekondev.azurewebsites.net/api/users'));
+
 // Launch app to listen to specified port
 app.listen(port, function () {
      console.log("Running RestHub on port " + port);
