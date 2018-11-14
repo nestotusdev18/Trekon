@@ -23,6 +23,7 @@ db.once('open', function(){
 db.on('error', function(err){
   console.log(err);
 });
+app.use(require('express').Router());
 app.use(bodyparser.urlencoded({
     extended:true
 }));
